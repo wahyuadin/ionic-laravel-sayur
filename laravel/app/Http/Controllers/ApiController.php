@@ -17,18 +17,36 @@ class ApiController extends Controller
         return Product::all();
     }
 
+    public function homepageDetail($id) {
+        return Product::where('id', $id)->get();
+    }
+
+
     public function cart_post(Request $request) {
         try {
             $this->validate($request, [
                 'users_id'          => 'required',
                 'products_id'       => 'required',
+                'quantiti'          => 'required',
             ]);
 
-            Sesi::tambah($request->all());
-            return response()->json([
-                'error' => null,
-                'data'  => "data berhasil diinput!"
-            ], 200);
+            $nama   = Product::where('id', $request->products_id)->value('name');
+            $harga  = Product::where('id', $request->products_id)->value('price');
+            $jumlah = $request->quantiti * $harga;
+
+            $save           = new Sesi();
+            $save->users_id = $request->users_id;
+            $save->products_id = $request->products_id;
+            $save->nama     = $nama;
+            $save->harga    = $harga;
+            $save->quantiti = $request->quantiti;
+            $save->jumlah   = $jumlah;
+            if ($save->save()) {
+                return response()->json([
+                    'error' => null,
+                    'data'  => "data berhasil diinput!"
+                ], 200);
+            }
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['error' => true, 'message' => $e->validator->errors()->all()], 422);
@@ -42,28 +60,7 @@ class ApiController extends Controller
         if ($data->isEmpty()) {
             return response()->json(['error' => true, 'data' => "data tidak ada"], 422);
         }
-
-        $response = [];
-        $priceCount = [];
-
-        foreach ($data as $d) {
-            $price = $d->produk->price;
-
-            if (!isset($priceCount[$price])) {
-                $priceCount[$price] = 0;
-            }
-
-            $priceCount[$price]++;
-        }
-        $response['price_counts'] = $priceCount;
-        foreach ($response['price_counts'] as $price => $count) {
-            return response()->json([
-                'error'             => false,
-                'data'              => $data,
-                'total_keranjang'   => $count,
-                'total_jumlah'      => $price
-            ], 200);
-        }
+        return $data;
     }
 
     public function cart_delete_all($id_user) {

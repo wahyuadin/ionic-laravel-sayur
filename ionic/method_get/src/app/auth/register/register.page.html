@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" text="Kembali"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="register()" #registerForm="ngForm" style="padding: 5%;">
+    <div class="heading ion-padding">
+      <h1>Welcome</h1>
+      <p>Isi Form Berikut untuk registrasi</p>
+    </div>
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Nama</ion-label>
+        <ion-input type="text" [(ngModel)]="nama" name="nama" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Username</ion-label>
+        <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Masukan ulang Password</ion-label>
+        <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button style="margin-top: 30px;" type="submit" expand="block" [disabled]="registerForm.invalid">Register</ion-button>
+  </form>
+</ion-content>

@@ -1,0 +1,44 @@
+<ion-content>
+  <ion-list lines="none" style="margin-left: 30px;" *ngFor="let data of responseData">
+    <ion-item-sliding>
+      <ion-item>
+        <div class="cart-item">
+          <div class="image" style="margin-left: 15px; margin-bottom: 10px;">
+            <ion-img src="{{ data.produk.media[0].original_url }}"></ion-img>
+          </div>
+          <div class="description">
+            <h3>{{ data.nama }}</h3>
+            <p><sup>Rp</sup>{{ data.harga }}</p>
+          </div>
+
+          <div class="actions">
+            <ion-buttons>
+              <ion-button>
+                <ion-icon slot="icon-only" name="add"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <div class="counter">{{ data.quantiti }}</div>
+            <ion-buttons>
+              <ion-button>
+                <ion-icon slot="icon-only" name="remove"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </div>
+        </div>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option>
+          <ion-icon name="trash-outline" size="large" color="danger"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-button style="margin-left: 40px; margin-bottom: 30px;" expand="block" *ngIf="(responseData)">
+    <ng-content>Cekout</ng-content>
+  </ion-button>
+
+  <div class="empty-cart" *ngIf="!(responseData) ">
+    <ion-icon name="cart"></ion-icon>
+    <p>Your cart is empty</p>
+  </div>
+</ion-content>

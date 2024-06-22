@@ -17,6 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('users_id')->constrained()->cascadeOnDelete();
             $table->foreignId('products_id')->constrained()->cascadeOnDelete();
+            $table->string('nama')->default('1');
+            $table->string('harga')->default('1');
+            $table->string('quantiti')->default('0');
+            $table->string('jumlah')->default('1');
             $table->timestamps();
         });
     }

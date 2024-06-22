@@ -1,0 +1,11 @@
+page-login {
+  .login {
+    --background: #08b94c; // Mengubah warna background tombol login
+    color: white; // Mengubah warna teks tombol login
+  }
+
+  .signup-button {
+    --border-color: #ccc; // Mengubah warna border tombol register (untuk fill="outline")
+    --color: #ccc; // Mengubah warna teks tombol register (untuk fill="outline")
+  }
+}

@@ -1,0 +1,36 @@
+<ion-content>
+  <div class="header">
+    <ion-buttons>
+      <ion-button routerLink="/">
+        <ion-icon slot="icon-only" color="light" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons>
+      <ion-button>
+        <ion-icon slot="icon-only" color="light" name="heart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </div>
+  <div class="card" *ngIf="responseData">
+    <div>
+      <ion-img class="card-img" src="{{ responseData[0].media[0].original_url }}"></ion-img>
+    </div>
+    <div>
+
+    </div>
+
+    <div class="card-content">
+      <div class="card-title">
+        <h1 class="ion-no-margin">{{ responseData[0].name }}</h1>
+        <p class="ion-no-margin">Rp {{ responseData[0].price }}</p>
+      </div>
+    </div>
+    <div class="about">
+      <h2>Deskripsi</h2>
+      <p>{{ responseData[0].description }}</p>
+    </div>
+    <ion-button expand="block" (click)="addItemToCart()">
+      <ng-content>Tambah Keranjang</ng-content>
+    </ion-button>
+  </div>
+</ion-content>

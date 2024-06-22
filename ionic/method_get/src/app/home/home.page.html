@@ -1,0 +1,45 @@
+<ion-content [fullscreen]="true">
+  <div class="header">
+    <h1>Final Project</h1>
+    <div class="avatar">
+      <ion-img src="https://i.ibb.co.com/z5VzmjM/icons8-user-80.png" routerLink="/login"></ion-img>
+    </div>
+  </div>
+
+  <div id="banner">
+    <ion-img src="https://i.ibb.co.com/hHcSYcF/banner.png"></ion-img>
+  </div>
+
+  <h1 class="list-header">Produk</h1>
+
+  <div class="food-list">
+    <div class="card" *ngFor="let get of responseData"
+    (click)="goToDetailPage(get.id)
+    ">
+      <ion-img class="card-img" [src]="get.media[0].original_url"></ion-img>
+      <div class="card-content">
+        <h3 class="title">{{ get.name }}</h3>
+        <h2 class="subtitle">Rp {{ get.price }}</h2>
+        <ion-buttons>
+          <ion-button>
+            <ion-icon slot="icon-only" name="add"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-tab-bar slot="bottom">
+  <ion-tab-button routerLink="/">
+    <ion-icon name="apps"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button tab="location">
+    <ion-icon name="location"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button tab="wishlist">
+    <ion-icon name="heart"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button tab="cart">
+    <ion-icon name="cart" routerLink="/cart"></ion-icon>
+  </ion-tab-button>
+</ion-tab-bar>

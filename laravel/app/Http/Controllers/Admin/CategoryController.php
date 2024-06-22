@@ -44,6 +44,8 @@ class CategoryController extends Controller
     {
         $category = Category::create($request->validated());
 
+        // dd($request->input('photo', false));
+
         if ($request->input('photo', false)) {
             $category->addMedia(storage_path('tmp/uploads/' . $request->input('photo')))->toMediaCollection('photo');
         }

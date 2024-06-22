@@ -1,0 +1,6 @@
+{
+  "name": "method_get",
+  "integrations": {
+    "capacitor": {}
+  }
+}

@@ -109,7 +109,7 @@ return [
     */
 
     'faker_locale' => 'en_US',
-    'kecuali'  => array('homepage','login','register'),
+    'kecuali'  => array('homepage','login','register','homepageDetail'),
 
     /*
     |--------------------------------------------------------------------------
