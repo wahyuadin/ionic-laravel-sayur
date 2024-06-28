@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['POST','GET','PUT','DELETE'],
 
-    'allowed_origins' => ['http://localhost:8100','http://localhost','capacitor://localhost','localhost:51780'],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 

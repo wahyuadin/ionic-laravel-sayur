@@ -116,10 +116,13 @@ export class CartPage{
                 this.apiService.postDataOrder(data).subscribe({
                     next: (res: any) => {
                       this.responsePostOrder = res;
-                      this.presentAlert('Berhasil Di Cekout!');
-                      console.log(data);
-                      this.router.navigate(['/cart/success']);
-
+                      this.apiService.wa(userData.user?.phone).subscribe({
+                        next: (res : any) => {
+                          console.log(res)
+                          this.presentAlert('Berhasil Di Cekout!');
+                          this.router.navigate(['/cart/success']);
+                        }
+                      })
                   },
                   error: (error) => {
                     if (error.status === 401) {

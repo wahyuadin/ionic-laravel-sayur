@@ -33,6 +33,7 @@ Route::group(['middleware' => 'cors'], function() {
                 Route::get('/{id}', [ApiController::class, 'profile_show']);
             });
             Route::get('riwayat/{id}', [ApiController::class,'riwayat']);
+            Route::get('wa/{phone}', [ApiController::class, 'wa']);
         });
     });
 });

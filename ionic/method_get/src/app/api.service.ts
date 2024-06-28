@@ -10,7 +10,7 @@ import { Token } from '@angular/compiler';
 })
 export class ApiService {
 
-  apiUrl = 'https://kspmugilestari.com/api';
+  apiUrl = 'http://127.0.0.1:8000/api';
 
   constructor(private http: HttpClient) { }
 
@@ -230,8 +230,26 @@ export class ApiService {
     return this.http.get<any>(`${this.apiUrl}/auth/keluar`, { headers });
   }
 
+  wa(number: any) {
+    const storedData = localStorage.getItem('data');
+    let token: string | null = null;
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        token = parsedData.token;
+      } catch (error) {
+        console.error('Error parsing stored data:', error);
+        return throwError('Error parsing stored data');
+      }
+    }
 
-
-
-
+    if (!token) {
+      throwError('Token is not available');
+    }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ token }`
+    });
+    return this.http.get<any>(`${this.apiUrl}/wa/${number}`, { headers });
+  }
 }

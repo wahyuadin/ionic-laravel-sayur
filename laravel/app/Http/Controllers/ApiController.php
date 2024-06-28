@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Session as Sesi;
 use App\Models\User;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 
@@ -137,6 +138,37 @@ class ApiController extends Controller
             'data'  => Sesi::showRiwayat(['user_id' => $id, 'show' => '0']),
             'date'  => $formattedCreatedAt
         ]);
+    }
+
+    public function wa($phone) {
+        $data = [
+            'apiKey' => 'd08882dc5e21a37670ca1d28948d55e6',
+            'phone' => $phone,
+            'message' => "Terimakasih telah order di kami! Mohon ditunggu, kami akan segera ke alamat anda.",
+        ];
+
+        // URL API yang akan dituju
+        $apiUrl = 'http://98.142.245.14:41243/api/sendMessage';
+
+        // Menggunakan Guzzle untuk membuat permintaan POST
+        $client = new Client();
+        try {
+            $response = $client->request('POST', $apiUrl, [
+                'form_params' => $data,
+            ]);
+
+            // Mendapatkan status code dari response
+            $statusCode = $response->getStatusCode();
+
+            // Mendapatkan body response
+            $body = $response->getBody()->getContents();
+
+            return response()->json(['error' => false, 'data' => $body], $statusCode);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to send message: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
 

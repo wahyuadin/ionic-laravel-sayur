@@ -61,7 +61,7 @@ export class LoginPage {
       password: this.password
     };
 
-    const url = 'https://kspmugilestari.com/api/auth/login';
+    const url = 'http://127.0.0.1:8000/api/auth/login';
 
     try {
       const response = await this.http.post<LoginResponse>(url, loginData).toPromise();
