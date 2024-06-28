@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataOrder;
 use Exception;
 use App\Models\Order;
 use App\Models\Payment;
@@ -10,6 +11,8 @@ use App\Models\Shipment;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Midtrans\Snap;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Session as Sesi;
 
 class OrderController extends Controller
 {
@@ -48,13 +51,13 @@ class OrderController extends Controller
 			}
 
 			$selectedShipping = $this->getSelectedShipping($destination,$totalWeight, $params['shippingService']);
-			
+
 			$baseTotalPrice = \Cart::getSubTotal();
 			$shippingCost = $selectedShipping['cost'];
 			$discountAmount = 0;
 			$discountPercent = 0;
 			$grandTotal = ($baseTotalPrice + $shippingCost) - $discountAmount;
-	
+
 			$orderDate = date('Y-m-d H:i:s');
 			$paymentDue = (new \DateTime($orderDate))->modify('+3 day')->format('Y-m-d H:i:s');
 
@@ -123,7 +126,7 @@ class OrderController extends Controller
 					];
 
 					$orderItem = OrderItem::create($orderItemParams);
-					
+
 					if ($orderItem) {
 						$product = Product::findOrFail($product->id);
 						$product->quantity -= $item->quantity;
@@ -197,7 +200,7 @@ class OrderController extends Controller
 
 		try{
 			$snap = Snap::createTransaction($transaction_details);
-	
+
 			$order->payment_token = $snap->token;
 			$order->payment_url = $snap->redirect_url;
 			$order->save();
@@ -209,4 +212,30 @@ class OrderController extends Controller
 		}
 
 	}
+
+    public function show() {
+        confirmDelete('Reject Data', 'Apakah Anda Yakin Untuk Reject Data ?');
+        return view('admin.order.index', ['data' => Sesi::ShowDataAdmin()]);
+    }
+
+    public function accept($id) {
+        if (Sesi::status($id, ['status' => '1'])) {
+            Alert::success('Berhasil', 'Data Berhasil Di Accept!');
+            return redirect()->back();
+        }
+    }
+
+    public function reject($id) {
+        if (Sesi::status($id, ['status' => '0'])) {
+            Alert::success('Berhasil', 'Data Berhasil Di Reject!');
+            return redirect()->back();
+        }
+    }
+
+    public function hapus($id) {
+        if (DataOrder::hapus($id)) {
+            Alert::success('Berhasil', 'Data Berhasil Di Hapus!');
+            return redirect()->back();
+        }
+    }
 }

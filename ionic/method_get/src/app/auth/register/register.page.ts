@@ -1,3 +1,4 @@
+import { ApiService } from './../../api.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
@@ -9,32 +10,44 @@ import { ToastController } from '@ionic/angular';
 })
 export class RegisterPage {
 
-  nama: string = ''; // Inisialisasi dengan nilai awal kosong
-  username: string = ''; // Inisialisasi dengan nilai awal kosong
-  email: string = ''; // Inisialisasi dengan nilai awal kosong
-  password: string = ''; // Inisialisasi dengan nilai awal kosong
-  confirmPassword: string = ''; // Inisialisasi dengan nilai awal kosong
+  nama: string = '';
+  username: string = '';
+  email: string = '';
+  password: string = '';
+  confirmPassword: string = '';
 
   constructor(
     private router: Router,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private apiService: ApiService,
+    private Router: Router
   ) {}
 
   register() {
-    // Validasi password
     if (this.password !== this.confirmPassword) {
       this.presentToast('Konfirmasi password tidak cocok.');
       return;
     }
 
-    // Implementasi logika registrasi (contoh sederhana)
-    console.log('Nama:', this.nama);
-    console.log('Username:', this.username);
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
-
-    // Contoh: Redirect ke halaman login setelah registrasi sukses
-    this.router.navigate(['/login']);
+    let body = {
+      'username': this.nama,
+      'email': this.email,
+      'password': this.password,
+    }
+    this.apiService.register(body).subscribe({
+      next: () => {
+        this.presentToast('Berhasil mendaftar. Silakan login.');
+        this.Router.navigate(['/login']);
+      },
+      error: (error) => {
+          if (error.status === 401) {
+              this.presentToast('Silahkan Login untuk melanjutkan.');
+              this.Router.navigate(['/login']);
+          } else {
+              console.error('Error fetching data from cart:', error);
+          }
+      }
+    });
   }
 
   async presentToast(message: string) {

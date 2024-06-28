@@ -1,0 +1,7 @@
+{
+  "name": "method_put",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

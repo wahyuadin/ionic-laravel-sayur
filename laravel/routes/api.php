@@ -16,21 +16,23 @@ Route::group(['middleware' => 'cors'], function() {
             Route::get('/', [ApiController::class, 'homepage']);
             Route::get('detail/{id}', [ApiController::class,'homepageDetail']);
             Route::prefix('auth')->group(function () {
-                Route::post('me',[AuthJWTController::class, 'me']);
+                Route::get('me',[AuthJWTController::class, 'me']);
                 Route::post('login',[AuthJWTController::class, 'login']);
                 Route::post('register',[AuthJWTController::class, 'register']);
-                // Route::post('logout',[AuthJWTController::class, 'logout']);
+                Route::get('keluar',[AuthJWTController::class, 'logout']);
                 Route::post('refresh',[AuthJWTController::class, 'refresh']);
             });
             Route::prefix('cart')->group(function () {
                 Route::post('/', [ApiController::class, 'cart_post']);
                 Route::get('show/{id}', [ApiController::class, 'cart_show']);
-                Route::delete('del/{id_user}', [ApiController::class, 'cart_delete_all']);
                 Route::delete('del-id/{id_sesi}', [ApiController::class, 'cart_delete_id']);
-                Route::prefix('order')->group(function () {
-                    Route::get('cekout/{id}', [ApiController::class, 'cekout']);
-                });
-             });
+                Route::post('cekout', [ApiController::class, 'cekout']);
+            });
+            Route::prefix('profile')->group(function () {
+                Route::put('/{id}', [ApiController::class, 'profile_edit']);
+                Route::get('/{id}', [ApiController::class, 'profile_show']);
+            });
+            Route::get('riwayat/{id}', [ApiController::class,'riwayat']);
         });
     });
 });

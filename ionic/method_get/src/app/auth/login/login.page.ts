@@ -1,5 +1,6 @@
+import { ApiService } from './../../api.service';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 
@@ -14,6 +15,7 @@ interface LoginResponse {
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
+  responseData: any;
   email: string = '';
   password: string = '';
 
@@ -22,8 +24,27 @@ export class LoginPage {
     private navCtrl: NavController,
     private alertController: AlertController,
     private toastCtrl: ToastController,
-    private router: Router
-  ) {}
+    private router: Router,
+    private ApiService:ApiService
+  ) {
+    const storedData = localStorage.getItem('data');
+    if (storedData) {
+      this.ApiService.cekSesi().subscribe({
+        next: (res: any) => {
+          this.responseData = res;
+          console.log(this.responseData)
+          this.navCtrl.navigateRoot('/profile');
+        },
+        error: (error) => {
+          if (error.status === 401) {
+              console.log('Show login form');
+          } else {
+              console.error('show login form');
+          }
+        }
+      })
+    }
+  }
 
   async login() {
     if (!this.email || !this.password) {
@@ -40,21 +61,21 @@ export class LoginPage {
       password: this.password
     };
 
-    const url = 'http://127.0.0.1:8000/api/auth/login';
+    const url = 'https://kspmugilestari.com/api/auth/login';
 
     try {
       const response = await this.http.post<LoginResponse>(url, loginData).toPromise();
-      if (response && response.token && response.data) {
-        localStorage.setItem('data', JSON.stringify({
-          user: response.data[0],
-          token: response.token
-        }));
-      }
-      // Redirect ke halaman home jika login berhasil
-      if (response && response.token && response.data) {
-        this.presentToast('Login Berhasil')
-        this.navCtrl.navigateRoot('/home');
-      }
+        if (response && response.token && response.data) {
+          localStorage.setItem('data', JSON.stringify({
+            user: response.data[0],
+            token: response.token
+          }));
+        }
+
+        if (response && response.token && response.data) {
+          this.presentToast('Login Berhasil')
+          this.navCtrl.navigateRoot('/home');
+        }
     } catch (error) {
       console.error('Login error', error);
       this.presentAlert('Username atau password salah');
@@ -82,6 +103,38 @@ export class LoginPage {
   }
 
   goBack() {
-    this.router.navigate(['/']); // Ganti '/' dengan rute tujuan kembali
+    this.router.navigate(['/']);
+  }
+
+  showData() {
+    const storedData = localStorage.getItem('data');
+    if (storedData) {
+        const userData = JSON.parse(storedData);
+        const userId = userData.user?.id;
+
+        if (userId) {
+            this.ApiService.showDataCart(userId).subscribe({
+                next: (res: any) => {
+                    this.responseData = res;
+                },
+                error: (error) => {
+                    if (error.status === 401) {
+                        this.presentToast('Silahkan Login untuk melanjutkan.');
+                        this.router.navigate(['/login']);
+                    } else {
+                        console.error('Error fetching data from cart:', error);
+                    }
+                }
+            });
+        } else {
+            console.error('User ID not found in stored data');
+            this.presentToast('Silahkan Login untuk melanjutkan.');
+            this.router.navigate(['/login']);
+        }
+    } else {
+        console.error('No stored data found');
+        this.presentToast('Silahkan Login untuk melanjutkan.');
+        this.router.navigate(['/login']);
+    }
   }
 }

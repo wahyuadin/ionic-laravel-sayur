@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #editForm="ngForm" (ngSubmit)="submitForm()" style="padding: 10px;" *ngFor="let item of responseData?.data" >
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Nama</ion-label>
+        <ion-input type="text" name="nama" [(ngModel)]="item.nama" placeholder="Nama Wajib Diisi" required ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Username</ion-label>
+        <ion-input type="text" name="username" value="tes data" [(ngModel)]="item.username" placeholder="Username Wajib Diisi" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input type="email" name="email" [(ngModel)]="item.email" placeholder="Email Wajib Diisi" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input type="password" name="password" [(ngModel)]="data.repassword" placeholder="Isi Jika Perlu"></ion-input>
+      </ion-item>
+      <p style="color: red; font-size: 13px; margin-left: 13px;">Masukan Jika Ingin Ganti Password</p>
+
+      <ion-item>
+        <ion-label position="stacked">Re-enter Password</ion-label>
+        <ion-input type="password" name="repassword" [(ngModel)]="data.password" placeholder="Masukan Kembali Password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Alamat</ion-label>
+        <ion-textarea name="address" [(ngModel)]="item.address" placeholder="Alamat Wajib Diisi" required></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">No Telp</ion-label>
+        <ion-input type="tel" name="phone" [(ngModel)]="item.phone" placeholder="No Telp Wajib Diisi" required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" type="submit" [disabled]="!editForm.valid" style="margin-top: 30px;">Simpan</ion-button>
+    <ion-button
+          style="margin-top: 5%; margin-bottom: 30px;"
+          class="signup-button"
+          fill="outline"
+          (click)="logout()"
+          expand="block"
+          >Logout
+    </ion-button>
+  </form>
+</ion-content>
+<ion-tab-bar slot="bottom">
+  <ion-tab-button routerLink="/">
+    <ion-icon name="home"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button tab="wishlist">
+    <ion-icon name="bag-handle-outline" routerLink="/pesanan"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button tab="cart">
+    <ion-icon name="cart" routerLink="/cart"></ion-icon>
+  </ion-tab-button>
+</ion-tab-bar>

@@ -1,10 +1,22 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('homepage');
+// Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('homepage');
+Route::get('/', function () {
+    if (auth::user()) {
+        if (Auth::user()->is_admin == 0) {
+            return response()->json(['error' => true, 'data' => 'user tidak dapat di akses di web']);
+        } else {
+            return redirect('/admin/dashboard');
+        }
+    } else {
+        return redirect('/login');
+    }
+});
 Route::get('/shop/{slug?}', [\App\Http\Controllers\ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/tag/{slug?}', [\App\Http\Controllers\ShopController::class, 'tag'])->name('shop.tag');
 Route::get('/product/{product:slug}', [\App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
@@ -44,6 +56,11 @@ Route::group(['middleware' => 'auth'], function() {
         // products
         Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
         Route::post('products/images', [\App\Http\Controllers\Admin\ProductController::class,'storeImage'])->name('products.storeImage');
+        Route::prefix('order')->group(function () {
+            Route::get('/', [OrderController::class, 'show']);
+            Route::put('/accept/{id}', [OrderController::class,'accept']);
+            Route::delete('/reject/{id}', [OrderController::class,'reject']);
+        });
     });
 });
 

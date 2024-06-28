@@ -1,0 +1,26 @@
+<ion-content [fullscreen]="true" class="ion-text-center">
+  <div class="success-message">
+    <ion-icon name="checkmark-circle-outline" class="success-icon"></ion-icon>
+    <p>Berhasil Cekout Berhasil!</p>
+    <ion-button routerLink="/pesanan" expand="block" class="btn-kembali">Lihat Pesanan</ion-button>
+  </div>
+</ion-content>
+
+<style>
+  .success-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .success-icon {
+    font-size: 5rem; /* Adjust the size of the icon as needed */
+    color: #4CAF50; /* Green color for success */
+  }
+
+  .btn-kembali {
+    margin-top: 20px; /* Adjust margin as needed */
+  }
+</style>

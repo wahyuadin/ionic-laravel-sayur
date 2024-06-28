@@ -30,7 +30,7 @@ class AuthJWTController extends Controller
 
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json(Auth::guard('api')->user());
     }
 
     public function logout()
@@ -45,10 +45,32 @@ class AuthJWTController extends Controller
         return $this->respondWithToken(auth::guard('api')->refresh());
     }
 
+    public function register(Request $request) {
+        try {
+            $this->validate($request,[
+                'username' => 'required',
+                'email' => 'required',
+                'password' => 'required'
+            ]);
+
+            $data = $request->all();
+            $data['password'] = bcrypt($request->password);
+            $user = User::create($data);
+            if ($user) {
+                return response()->json(['error' => false, 'data' => 'Register Berhasil!']);
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['error' => true, 'message' => $e->validator->errors()->all()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 500);
+        }
+    }
+
     protected function respondWithToken($token)
     {
         return response()->json([
             'token' => $token,
         ]);
     }
+
 }

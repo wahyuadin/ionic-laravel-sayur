@@ -1,6 +1,9 @@
 <ion-content>
+  <ion-refresher slot="fixed" [pullFactor]="0.5" [pullMin]="100" [pullMax]="200" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list lines="none" style="margin-left: 30px;" *ngFor="let data of responseData">
-    <ion-item-sliding>
+    <ion-item-sliding *ngIf="responseData" >
       <ion-item>
         <div class="cart-item">
           <div class="image" style="margin-left: 15px; margin-bottom: 10px;">
@@ -33,7 +36,7 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <ion-button style="margin-left: 40px; margin-bottom: 30px;" expand="block" *ngIf="(responseData)">
+  <ion-button style="margin-left: 40px; margin-bottom: 30px;" expand="block" *ngIf="(responseData)" (click)="Cekout()">
     <ng-content>Cekout</ng-content>
   </ion-button>
 
@@ -42,3 +45,14 @@
     <p>Your cart is empty</p>
   </div>
 </ion-content>
+<ion-tab-bar slot="bottom">
+  <ion-tab-button routerLink="/">
+    <ion-icon name="home"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button tab="wishlist">
+    <ion-icon name="bag-handle-outline" routerLink="/pesanan"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button tab="cart">
+    <ion-icon name="cart" routerLink="/cart"></ion-icon>
+  </ion-tab-button>
+</ion-tab-bar>

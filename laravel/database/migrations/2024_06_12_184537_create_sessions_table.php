@@ -17,10 +17,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('users_id')->constrained()->cascadeOnDelete();
             $table->foreignId('products_id')->constrained()->cascadeOnDelete();
-            $table->string('nama')->default('1');
-            $table->string('harga')->default('1');
-            $table->string('quantiti')->default('0');
-            $table->string('jumlah')->default('1');
+            $table->string('nama')->nullable();
+            $table->string('harga')->nullable();
+            $table->string('quantiti')->default('1');
+            $table->string('jumlah')->nullable();
+            $table->enum('status', [0,1,2])->default(2);
+            $table->string('show')->default('1');
             $table->timestamps();
         });
     }
